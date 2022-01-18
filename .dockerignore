@@ -1,0 +1,6 @@
+Makefile
+.venv
+.vscode
+**/__pycache__
+.git
+.cache
