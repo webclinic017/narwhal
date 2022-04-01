@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from os import environ
+from mangum import Mangum
 
 NARWHAL_DISABLE_DOCS = bool(environ.get('NARWHAL_DISABLE_DOCS') == 'true')
 
@@ -24,9 +25,14 @@ app.add_middleware(
   allow_headers=['*'],
 )
 
-
 @app.get('/')
 async def hello():
   return {
     'Hello': app_name
   }
+
+def handler(event, context):
+    asgi_handler = Mangum(app)
+    response = asgi_handler(event, context)
+
+    return response
